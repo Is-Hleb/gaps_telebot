@@ -18,7 +18,6 @@
     <b>h10 1 2 3 4h2 14*h8 20</b>
 </p></li>
 <li>/show_group - List the group as a message</li>
-<li>/show_group - List the group as a message</li>
 <li>/show_marked - Displays already marked</li>
 <li>/remark - Differs from /mark in that it clears the base of gaps for the current date</li>
 <li>/download - allows you to download a table with gaps in a specific month</li>
@@ -34,6 +33,6 @@ File for working with the base. <br> The structure of the base is built on the c
 <h2>functions.py</h2>
 <p>
 The file contains two functions, one for sending a list with a message, the other for logging errors</p>
-<h2>functions.py</h2>
+<h2>Main.py</h2>
 <p>
 The file describes the main logic of the application</p>
