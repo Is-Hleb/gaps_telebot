@@ -1,4 +1,4 @@
-TOKEN = "1127274147:AAHhYwn4poeEnb_Oc5WcJC4GoKTyH6gxXj8"
+TOKEN = ""
 
 ADMIN = {
     "PASSWORD": "admin",
