@@ -7,7 +7,7 @@ import Excel
 import time
 import os
 
-bot = telebot.TeleBot(config.TOKEN)
+bot = None
 
 group = []
 selected = []
@@ -78,7 +78,6 @@ def admin_logic(message):
                 print(e.args)
                 return
 
-    bot.send_message(message.chat.id, "Ожидайте выполнения запроса")
     if is_nums:
         PersonModel.delete_by_arr_of_id(data)
     else:
@@ -124,8 +123,6 @@ def mark_users(message):
             def_hours = int(data[0][1:])
             data.pop(0)
 
-            for el in data:
-                print(el)
 
             cur_day = dt.date.today().day
             cur_month = dt.date.today().month
@@ -198,7 +195,7 @@ def handle_commands(messages):
 
             elif comm == "/remark":
                 send_group(message)
-                bot.send_message(message.chat.id, config.REPLICAS["remark"])
+                bot.send_message(message.chat.id, config.REPLICAS["mark"])
                 bot.register_next_step_handler(message, remark_users)
 
             elif comm == "/help":
@@ -225,29 +222,32 @@ def handle_commands(messages):
                 bot.send_message(message.chat.id, config.REPLICAS["command_input_err"])
 
 
-while True:
-    try:
-        # try:
-        #     file_list = [file for file in os.listdir("cash")]
-        #     for file in file_list:
-        #         os.remove(os.path.join("cash", file))
-        # except OSError as e:
-        #     Fun.addToLog(e.args)
-        load_group_res()
-        bot.enable_save_next_step_handlers(delay=2)
-        bot.load_next_step_handlers()
-        bot.set_update_listener(handle_commands)
-        bot.polling()
-    except Exception as e:
-        print(e.args)
-        Fun.addToLog(e.args)
-        time.sleep(2)
+def init():
+    global bot
 
-#
-# load_group_res()
-# bot.enable_save_next_step_handlers(delay=2)
-# bot.load_next_step_handlers()
-# bot.set_update_listener(handle_commands)
-# bot.polling()
+    file = open("config.txt")
+    token = file.readline()
+    if token == "":
+        print("Enter bot token")
+        token = input()
+        file.close()
+        file = open("config.txt", "w")
+        file.write(token)
+        file.close()
 
-# init()
+    while True:
+        try:
+            load_group_res()
+            bot = telebot.TeleBot(token)
+            bot.enable_save_next_step_handlers(delay=2)
+            bot.load_next_step_handlers()
+            bot.set_update_listener(handle_commands)
+            print("Bot is running...")
+            bot.polling()
+            bot = telebot.TeleBot(token)
+        except Exception as e:
+            bot = None
+            print(e.args)
+            Fun.addToLog(e.args)
+            time.sleep(2)
+init()
